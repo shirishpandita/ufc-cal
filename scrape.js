@@ -64,6 +64,7 @@ async function getDetailsFromEventLink(url) {
       .innerText.replace(/\s\s+/g, " ")
       .trim();
     let name = `${headlinePrefix}: ${headline}`;
+    if (headline.includes("UFC Fight Night")) {return null; // Skip this event if it is a UFC Fight Night}
     let date = root
       .querySelector(".c-hero__headline-suffix")
       .getAttribute("data-timestamp");
@@ -202,6 +203,7 @@ async function getAllDetailedEvents() {
     // Convert each URL to the details of the corresponding UFC event
     events = events.map(getDetailsFromEventLink);
     events = await Promise.all(events);
+    events = events.filter(event => event ! == null);
     return events;
   } catch (error) {
     console.error(error);
